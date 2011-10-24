@@ -47,4 +47,6 @@ RSpec::Core::RakeTask.new(:mocksimile) do |spec|
   spec.pattern = FileList['spec/mocksimile/**/*_spec.rb']
 end
 
-task :default => [:mockery, :mocksimile]
+desc "Run all specs"
+task :spec => [:mockery, :mocksimile]
+task :default => :spec
