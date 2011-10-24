@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.dirname(__FILE__) + '/spec_helper'
 
 describe Mockumentary do
   describe '.generate' do
@@ -12,8 +12,8 @@ describe Mockumentary do
       defined?(Mockumentary::User).should be_true
     end
 
-    it 'created class is a Mockumentary::Model' do
-      Mockumentary::User.ancestors.should include(Mockumentary::Model)
+    it 'created class is a Mockumentary::Mockery' do
+      Mockumentary::User.ancestors.should include(Mockumentary::Mockery)
     end
 
     it 'creates a reference to the mocked class' do
