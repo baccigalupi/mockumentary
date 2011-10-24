@@ -14,6 +14,9 @@ ActiveRecord::Base.establish_connection(
   :database => SQLite3::Database.new("test.db")
 )
 load('fixtures/db/schema.rb')
+unless defined?(Rails)
+  class Rails; end
+end
 
 # Requires supporting files with custom matchers and macros, etc,
 Dir["#{File.dirname(__FILE__)}/../support/**/*.rb"].each {|f| require f}

@@ -65,7 +65,7 @@ module Mockumentary
     end
 
     def self.mock_class(klass)
-      "Mockumentary::#{klass}".constantize 
+      Mockumentary.constantize(klass)
     rescue
       Mockumentary.generate(klass)
     end
@@ -75,7 +75,7 @@ module Mockumentary
     end
 
     def self.mockify
-      # introspect columens
+      # introspect columns
       self::CLASS.columns.each do |c|
         name = c.name.to_sym
         if save_fields.include?(name)

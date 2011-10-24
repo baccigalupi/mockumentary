@@ -30,4 +30,28 @@ describe Mockumentary do
       Mockumentary.generate(User)
     end
   end
+
+  describe '.instrospect' do
+    before do
+      Rails.stub(:root).and_return(File.dirname(__FILE__) + "/fixtures")
+      Mockumentary.send(:remove_const, :User) if defined?(Mockumentary::User)
+      Mockumentary.send(:remove_const, :Event) if defined?(Mockumentary::Event)
+      Mockumentary.send(:remove_const, :EventResource) if defined?(Mockumentary::EventResource)
+      Mockumentary.send(:remove_const, :Task) if defined?(Mockumentary::Task)
+      Mockumentary::Event.send(:remove_const, :Follow) if defined?(Mockumentary::Event::Follow)
+    end
+
+    it 'generates for all first level models' do
+      Mockumentary.introspect
+      defined?(Mockumentary::User).should == 'constant'
+      defined?(Mockumentary::Event).should == 'constant'
+      defined?(Mockumentary::EventResource).should == 'constant'
+      defined?(Mockumentary::Task).should == 'constant'
+    end
+
+    it 'generates recursively for deeper models' do
+      Mockumentary.introspect
+      defined?(Mockumentary::Event::Follow).should == 'constant'
+    end
+  end
 end
