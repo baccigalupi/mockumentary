@@ -20,6 +20,10 @@ module Mockumentary
       @uid
     end
 
+    def self.overrides
+      {}
+    end
+
     FAKERY_MAP = {
       :integer => :integer,
       :decimal => :decimal,
@@ -115,15 +119,34 @@ module Mockumentary
       end
     end
 
-    def self.mock_opts
-      init_defaults.merge(mock_defaults).inject({}) do |result, arr|
+    def self.evaluate(opts)
+      opts.inject({}) do |result, arr|
         result[arr.first] = fake_data(arr.last)
         result
       end
     end
 
+    def self.mock_opts
+      opts = init_defaults.dup
+      opts.merge!(mock_defaults)
+      opts.merge!(overrides[:mock]) if overrides && overrides[:mock]
+      evaluate(opts)
+    end
+
+    def self.init_opts
+      opts = init_defaults.dup
+      opts.merge!(overrides[:init]) if overrides && overrides[:init]
+      evaluate(opts)
+    end
+
+    def self.save_opts
+      opts = save_defaults.dup
+      opts.merge!(overrides[:save]) if overrides && overrides[:save]
+      evaluate(opts)
+    end
+
     def initialize(opts={})
-      super(self.class.init_defaults.merge(opts))
+      super(self.class.init_opts.merge(opts))
       self.class.relationships.each do |key, value|
         send("#{key}=", value.call)
       end
@@ -135,12 +158,12 @@ module Mockumentary
 
     def self.mock!(opts={})
       instance = mock(opts)
-      instance.save
+      instance.save(opts)
     end
 
-    def save
-      self.class.save_defaults.each do |key, value|
-        self[key] = self.class.fake_data(value)
+    def save(opts={})
+      self.class.save_opts.merge(opts).each do |key, value|
+        self[key] = value
       end
       self
     end

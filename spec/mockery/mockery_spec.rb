@@ -121,4 +121,85 @@ describe Mockumentary::Mockery do
       end
     end
   end
+
+  describe 'overriding defaults' do
+    before do
+      Mockumentary.generate(User)
+    end
+
+    describe 'with mock options' do
+      before do
+        class Mockumentary::User
+          def self.overrides
+            { :mock => 
+              { 
+                :name => lambda { "#{Faker::Name.first_name} #{Faker::Name.last_name}" },
+                :foo => 'not bar'
+              } 
+            }
+          end
+        end
+      
+        @user = Mockumentary::User.mock(:foo => 'bar') 
+      end
+
+      it 'should use the overrides instead of the defaults' do
+        @user.name.split.size.should == 2 
+      end
+      
+      it 'should not override initializaiton options' do
+        @user.foo.should == 'bar' 
+      end
+    end
+
+    describe 'with init options' do
+      before do
+        class Mockumentary::User
+          def self.overrides
+            { :init => 
+              { 
+                :state => 'new',
+                :new_record => 'yup'
+              } 
+            }
+          end
+        end
+      
+        @user = Mockumentary::User.new(:state => 'jaded') 
+      end
+
+      it 'should use the overrieds instead of the defaults' do
+        @user.new_record.should == 'yup'
+      end
+
+      it 'should options passed into new over those on the class' do
+        @user.state.should == 'jaded'
+      end
+    end
+
+    describe 'save options' do 
+      before do
+        class Mockumentary::User
+          def self.overrides
+            { :save => 
+              { 
+                :state => 'saved',
+                :created_at => Time.now + 3.years
+              } 
+            }
+          end
+        end
+      
+        @user = Mockumentary::User.mock!(:state => 'jaded') 
+      end
+
+      it 'should use the overrides instead of the defaults' do
+        @user.created_at.should > Time.now + 61.days
+      end
+
+      it 'should options passed into new over those on the class' do
+        @user.state.should == 'jaded'
+      end
+    end
+  end
 end
