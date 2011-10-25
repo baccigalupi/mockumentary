@@ -1,0 +1,62 @@
+---
+User:
+  :init:
+    :new_record: true
+    :state: new
+  :save:
+    :new_record: false
+    :id: :uid
+    :created_at: :datetime
+    :updated_at: :datetime
+    :state: saved
+  :mock:
+    :name: :string
+    :full_name: :full_name
+Task:
+  :init:
+    :new_record: true
+  :save:
+    :new_record: false
+    :id: :uid
+    :created_at: :datetime
+    :updated_at: :datetime
+  :mock:
+    :name: :string
+    :due_at: :datetime
+    :priority: :integer
+    :user_id: :integer
+Event:
+  :init:
+    :new_record: true
+  :save:
+    :new_record: false
+    :id: :uid
+    :created_at: :datetime
+    :updated_at: :datetime
+  :mock:
+    :user_id: :integer
+    :type: :string
+EventResource:
+  :init:
+    :new_record: true
+  :save:
+    :new_record: false
+    :id: :uid
+    :created_at: :datetime
+    :updated_at: :datetime
+  :mock:
+    :event_id: :integer
+    :type: :string
+    :resource_type: :string
+    :resource_id: :integer
+Event::Follow:
+  :init:
+    :new_record: true
+  :save:
+    :new_record: false
+    :id: :uid
+    :created_at: :datetime
+    :updated_at: :datetime
+  :mock:
+    :user_id: :integer
+    :type: :string

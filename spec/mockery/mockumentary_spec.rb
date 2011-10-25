@@ -56,7 +56,7 @@ describe Mockumentary do
     before do
       Rails.stub(:root).and_return(FIXTURE_ROOT)
       Mockumentary.introspect
-      @dir = File.dirname(__FILE__) + "/fixtures/config"
+      @dir = "#{FIXTURE_ROOT}/config"
       @path = @dir + "/mockumentary.yml"
       File.delete(@path) if File.exist?(@path)
 
@@ -79,7 +79,7 @@ describe Mockumentary do
     end
 
     it 'will have an entry for each class' do
-      @hash.keys.should include 'User', 'Event', 'EventResource', 'Task'
+      @hash.keys.should include 'User', 'Event', 'EventResource', 'Task', 'Event::Follow'
     end
 
     it 'each class will have an init hash that combines that classes overrides with init_defaults' do

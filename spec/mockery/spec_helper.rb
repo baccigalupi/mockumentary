@@ -17,13 +17,13 @@ load('fixtures/db/schema.rb')
 unless defined?(Rails)
   class Rails; end
 end
-FIXTURE_ROOT = File.dirname(__FILE__) + "/fixtures"
+FIXTURE_ROOT = File.dirname(__FILE__) + "/../fixtures"
 
 # Requires supporting files with custom matchers and macros, etc,
 Dir["#{File.dirname(__FILE__)}/../support/**/*.rb"].each {|f| require f}
 
 # Require fake AR files
-Dir["#{File.dirname(__FILE__)}/fixtures/app/**/*.rb"].each {|f| require f}
+Dir["#{FIXTURE_ROOT}/app/models/**/*.rb"].each {|f| require f}
 
 def debuggery statement
   if $debug
