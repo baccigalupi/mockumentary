@@ -1,5 +1,19 @@
 module Mockumentary
   class Mockery < Hashie::Mash
+    def self.ar_class
+      @ar_class ||= infer_ar_class
+    end
+
+    def self.ar_class=(klass)
+      @ar_class = klass
+      introspect if klass
+      klass
+    end
+
+    def self.infer_ar_class
+      self.to_s.gsub(/^Mockumentary/, '').constantize
+    end
+
     def self.uid
       @uid ||= 0
       @uid += 1
@@ -64,7 +78,7 @@ module Mockumentary
       @save_fields ||= [:id, :created_at, :updated_at]
     end
 
-    def self.mock_class(klass)
+    def self.build(klass)
       Mockumentary.constantize(klass)
     rescue
       Mockumentary.generate(klass)
@@ -74,22 +88,30 @@ module Mockumentary
       @relationships ||= {}
     end
 
-    def self.mockify
+    def self.reset_defaults
+      @save_defaults = nil
+      @mock_defaults = nil
+      @uid = nil
+    end
+
+    def self.introspect
+      reset_defaults
+
       # introspect columns
-      self::CLASS.columns.each do |c|
+      ar_class.columns.each do |c|
         name = c.name.to_sym
-        if save_fields.include?(name)
-          save_defaults[name] ||= FAKERY_MAP[c.type]
+        if save_fields.include?(name) 
+          save_defaults[name] = FAKERY_MAP[c.type] if name != :id
         else
-          mock_defaults[name] ||= FAKERY_MAP[c.type]
+          mock_defaults[name] = FAKERY_MAP[c.type]
         end 
       end
 
       # introspect relationships
-      self::CLASS.reflections.each do |name, reflection|
+      ar_class.reflections.each do |name, reflection|
         attr_accessor name
         class_name = reflection.options[:class_name] || name.to_s.classify
-        relationships[name] = lambda { Collection.new(mock_class(class_name)) } if reflection.collection?
+        relationships[name] = lambda { Collection.new(build(class_name)) } if reflection.collection?
       end
     end
 

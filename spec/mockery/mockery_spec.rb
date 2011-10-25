@@ -5,23 +5,42 @@ describe Mockumentary::Mockery do
     @model = Mockumentary::Mockery.new
   end
 
-  it 'will respond to any method without raising an error' do
-    @model.fooey_bar.should be_nil
-  end
+  describe 'basic behavior' do
+    it 'will respond to any method without raising an error' do
+      @model.fooey_bar.should be_nil
+    end
 
-  it 'can be loaded with a hash of options' do
-    model = Mockumentary::Mockery.new(:fooey_bar => 'zardoz')
-    model.fooey_bar.should == 'zardoz'
-  end
+    it 'can be loaded with a hash of options' do
+      model = Mockumentary::Mockery.new(:fooey_bar => 'zardoz')
+      model.fooey_bar.should == 'zardoz'
+    end
 
-  it 'attributes can be set on individual items' do
-    @model.fooey_bar = 'funktastic'
-    @model.fooey_bar.should == 'funktastic'
+    it 'attributes can be set on individual items' do
+      @model.fooey_bar = 'funktastic'
+      @model.fooey_bar.should == 'funktastic'
+    end
   end
 
   describe 'mocking' do
     before do
+      Mockumentary.generate(Event)
       Mockumentary.generate(User)
+    end
+
+    describe '.ar_class' do
+      it 'should be the AR class that it was constructed with' do
+        Mockumentary::User.ar_class.should == User
+      end
+
+      it 'setting it will cause introspection to occur' do
+        Mockumentary::User.ar_class = Event
+        Mockumentary::User.mock_defaults.should == Mockumentary::Event.mock_defaults
+      end
+
+      it 'can be inferred when it is nil' do
+        Mockumentary::User.ar_class = nil
+        Mockumentary::User.ar_class.should == User
+      end
     end
 
     describe '.new' do
@@ -45,10 +64,14 @@ describe Mockumentary::Mockery do
     end
 
     describe '.mock' do 
+      before do
+        Mockumentary::User.ar_class = User
+      end
+
       it 'should add faked attributes' do
         user = Mockumentary::User.mock
         user.name.should be_a(String)
-        user.name.length.should < 32
+        user.name.split.size.should == 3
       end
 
       it 'should not add an id, or other save attributes' do

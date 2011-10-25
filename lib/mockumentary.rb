@@ -8,14 +8,12 @@ module Mockumentary
     end
 
     mock_class = constantize klass
-    mock_class.mockify
   end
 
   def self.build(klass)
     class_eval <<-RUBY
-      class #{klass} < Mockumentary::Mockery
-        CLASS = ::#{klass}
-      end
+      class #{klass} < Mockumentary::Mockery; end
+      #{klass}.ar_class = ::#{klass}
     RUBY
   end
 
