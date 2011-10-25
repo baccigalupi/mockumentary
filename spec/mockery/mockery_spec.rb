@@ -133,7 +133,7 @@ describe Mockumentary::Mockery do
           def self.overrides
             { :mock => 
               { 
-                :name => lambda { "#{Faker::Name.first_name} #{Faker::Name.last_name}" },
+                :name => :full_name,
                 :foo => 'not bar'
               } 
             }

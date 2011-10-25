@@ -24,7 +24,7 @@ describe Mockumentary do
     it 'should introspect on the created class' do
       Mockumentary.send(:remove_const, :User) if defined?(Mockumentary::User)
       Mockumentary.generate(User)
-      Mockumentary::User.mock_defaults.should == {:name => :words}
+      Mockumentary::User.mock_defaults.should == {:name => :string}
     end
   end
 

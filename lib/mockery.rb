@@ -24,41 +24,20 @@ module Mockumentary
       {}
     end
 
-    FAKERY_MAP = {
-      :integer => :integer,
-      :decimal => :decimal,
-      :float => :decimal,
-      :string => :words, 
-      :text => :sentences,
-      :datetime => :time, 
-      :timestamp => :time, 
-      :time => :time, 
-      :date => :date, 
-      :binary => :hash, 
-      :boolean => false
-    }
-
     def self.fake_data(key)
-      case key
-      when :words
-        Faker::Lorem.words.join(' ')
-      when :sentences
-        Faker::Lorem.sentences.join(' ')
-      when :integer
-        rand(100)
-      when :decimal
-        rand * 100
-      when :time
-        Time.now + rand(60).days
-      when :date
-        Date.today + rand(60)
-      when :hash
-        Faker::Lorem.characters
-      when :uid
-        uid
-      else
-        key.respond_to?(:call) ? key.call : key
+      data = Mockumentary::Data.generate(key)
+      
+      unless data
+        data  = if key == :uid
+          uid
+        elsif key.respond_to?(:call)
+          key.respond_to?(:call) 
+        else
+          key
+        end
       end
+
+      data
     end
 
     def self.init_defaults
@@ -105,9 +84,9 @@ module Mockumentary
       ar_class.columns.each do |c|
         name = c.name.to_sym
         if save_fields.include?(name) 
-          save_defaults[name] = FAKERY_MAP[c.type] if name != :id
+          save_defaults[name] = c.type if name != :id
         else
-          mock_defaults[name] = FAKERY_MAP[c.type]
+          mock_defaults[name] = c.type
         end 
       end
 

@@ -41,6 +41,7 @@ module Mockumentary
   end
 end
 
+require 'data'
 require 'collection'
 require 'mockery'
 require 'mocksimile'
