@@ -11,7 +11,7 @@ Bundler.require(:test)
 # do the activerecord and schema load dance.
 ActiveRecord::Base.establish_connection(
   :adapter => 'sqlite3', 
-  :database => SQLite3::Database.new("test.db")
+  :database => SQLite3::Database.new("spec/mockery/test.db")
 )
 load('fixtures/db/schema.rb')
 unless defined?(Rails)

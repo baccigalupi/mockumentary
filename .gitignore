@@ -27,7 +27,7 @@ pkg
 #
 # For MacOS:
 #
-#.DS_Store
+.DS_Store
 
 # For TextMate
 #*.tmproj
@@ -39,10 +39,13 @@ pkg
 #.\#*
 
 # For vim:
-#*.swp
+*.swp
 
 # For redcar:
 #.redcar
 
 # For rubinius:
 #*.rbc
+
+# For the test dbs
+spec/mockery/test.db
