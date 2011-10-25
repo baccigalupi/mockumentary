@@ -1,82 +1,63 @@
 module Mockumentary
   module Data
     def self.generate(key)
-      begin
-        klass = "Mockumentary::Data::#{key.to_s.classify}".constantize
-        klass.generate
-      rescue
-      end
+      self.send(key) rescue nil
     end
 
-    module String
-      def self.generate
-        Faker::Lorem.words.join(' ')
-      end
+    def self.string
+      Faker::Lorem.words.join(' ')
     end
 
-    module Text
-      def self.generate
-        Faker::Lorem.sentences.join(' ')
-      end
+    def self.text
+      Faker::Lorem.sentences.join(' ')
     end
 
-    module Integer
-      def self.generate
-        rand(100)
-      end
+    def self.integer
+      rand(100)
     end
 
-    module Decimal
-      def self.generate
-        rand * 100
-      end
+    def self.decimal
+      rand * 100
     end
 
-    Float = Decimal
-
-    module Time
-      def self.generate
-        ::Time.now + rand(60).days
-      end
+    def self.float
+      decimal
     end
 
-    Timestamp = Time
-    Datetime = Time
-
-    module Date
-      def self.generate
-        ::Date.today + rand(60)
-      end
+    def self.time
+      Time.now + rand(60).days
     end
 
-    module Binary
-      def self.generate
-        Faker::Lorem.characters
-      end
+    def self.timestamp
+      time
     end
 
-    module Boolean
-      def self.generate
-        false
-      end
+    def self.datetime
+      time
     end
 
-    module FirstName
-      def self.generate
-        Faker::Name.first_name
-      end
+    def self.date
+      Date.today + rand(60)
     end
 
-    module LastName
-      def self.generate
-        Faker::Name.last_name
-      end
+    def self.binary
+      Faker::Lorem.characters
     end
 
-    module FullName
-      def self.generate
-        "#{FirstName.generate} #{LastName.generate}"
-      end
+    def self.boolean
+      false
+    end
+
+    def self.first_name
+      Faker::Name.first_name
+    end
+
+    def self.last_name
+      Faker::Name.last_name
+    end
+
+    def self.full_name
+      "#{first_name} #{last_name}"
     end
   end
 end

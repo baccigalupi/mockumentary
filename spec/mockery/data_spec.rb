@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe Mockumentary::Data do
-  it 'nested classes should generate data' do
-    Mockumentary::Data::Datetime.generate.should be_a(Time)
-    Mockumentary::Data::FullName.generate.should be_a(String)
-    Mockumentary::Data::FullName.generate.split.size.should == 2
+  it 'should generate data via methods' do
+    Mockumentary::Data.datetime.should be_a(Time)
+    Mockumentary::Data.full_name.should be_a(String)
+    Mockumentary::Data.full_name.split.size.should == 2
   end
 
   it 'should generate from the correct class given a key' do
