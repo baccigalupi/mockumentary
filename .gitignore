@@ -49,3 +49,6 @@ pkg
 
 # For the test dbs
 spec/mockery/test.db
+
+# fixture config
+spec/mockery/fixtures/config/*.yml
