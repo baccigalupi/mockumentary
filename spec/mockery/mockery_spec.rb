@@ -23,16 +23,14 @@ describe Mockery do
 
   describe '.generate' do
     before do
-      Mockery.generate(User)
+      Mockery.generate(User) unless defined?(Mockery::User)
     end
 
-    it 'creates a class in the Mockumentary namespace' do
-      Mockery.send(:remove_const, :User) if defined?(Mockery::User)
-      Mockery.generate(User)
-      lambda { Mockery::User }.should_not raise_error
+    it 'creates a class in the Mockery namespace' do
+      defined?(Mockery::User).should == 'constant'
     end
 
-    it 'created class is a Mockumentary::Mockery' do
+    it 'created class is a Mockery subclass' do
       Mockery::User.ancestors.should include(Mockery)
     end
 
@@ -42,8 +40,6 @@ describe Mockery do
     end
 
     it 'should introspect on the created class' do
-      Mockery.send(:remove_const, :User) if defined?(Mockery::User)
-      Mockery.generate(User)
       Mockery::User.mock_defaults.should == {:name => :string}
     end
   end

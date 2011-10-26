@@ -11,6 +11,10 @@ class Mocksimile < Mockumentary::Model
     # relationships should be in here too
   end
 
+  def self.container_name
+    "Mocksimile"
+  end
+
   def self.load(dir=nil)
     unless dir
       dir = if defined?(Rails) 

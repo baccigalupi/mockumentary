@@ -3,19 +3,10 @@ module Mockumentary
     DUMP_NAME = 'mockumentary.yml'
     
     def self.generate(klass)
-      begin mock_class = constantize klass
-      rescue
-        build klass
-      end
-
       mock_class = constantize klass
+      build klass unless mock_class
+      mock_class ||= constantize klass
     end
-
-    # def self.build(klass)
-    #   constantize(klass)
-    # rescue
-    #   generate(klass)
-    # end
 
     def self.init_defaults
       @init_defaults ||= {
@@ -40,13 +31,13 @@ module Mockumentary
 
     def self.build(klass)
       class_eval <<-RUBY
-        class #{klass} < Mockery; end
-        classes << #{self}::#{klass}
+        class #{container_name}::#{klass} < #{container_name}; end
+        classes << #{container_name}::#{klass}
       RUBY
     end
 
     def self.constantize(klass)
-      "#{self}::#{klass}".constantize
+      classes.detect{|c| c.to_s == "#{container_name}::#{klass}"}
     end
 
     def self.uid

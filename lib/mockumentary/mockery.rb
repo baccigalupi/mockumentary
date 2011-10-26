@@ -9,13 +9,17 @@ class Mockery < Mockumentary::Model
     klass
   end
 
+  def self.container_name
+    "Mockery"
+  end
+
   def self.infer_ar_class
-    self.to_s.gsub(/^Mockery/, '').constantize
+    self.to_s.gsub(/^#{container_name}/, '').constantize
   end
 
   def self.build(klass)
     super
-    class_eval "#{klass}.ar_class = ::#{klass}"
+    class_eval "#{container_name}::#{klass}.ar_class = ::#{klass}"
   end
 
   def self.relationships

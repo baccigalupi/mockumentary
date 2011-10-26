@@ -50,5 +50,6 @@ pkg
 # For the test dbs
 spec/mockery/test.db
 
-# fixture config
+# project specific files
 spec/mockery/fixtures/config/*.yml
+performance.txt
