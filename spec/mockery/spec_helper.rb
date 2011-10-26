@@ -14,6 +14,7 @@ ActiveRecord::Base.establish_connection(
   :database => SQLite3::Database.new("spec/mockery/test.db")
 )
 load('fixtures/db/schema.rb')
+
 unless defined?(Rails)
   class Rails; end
 end
@@ -24,12 +25,6 @@ Dir["#{File.dirname(__FILE__)}/../support/**/*.rb"].each {|f| require f}
 
 # Require fake AR files
 Dir["#{FIXTURE_ROOT}/app/models/**/*.rb"].each {|f| require f}
-
-def debuggery statement
-  if $debug
-    puts statement
-  end
-end
 
 RSpec.configure do |config|
   

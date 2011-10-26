@@ -1,54 +1,24 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe Mockumentary do
-  describe '.generate' do
-    before do
-      Mockumentary.generate(User)
-    end
-
-    it 'creates a class in the Mockumentary namespace' do
-      Mockumentary.send(:remove_const, :User) if defined?(Mockumentary::User)
-      Mockumentary.generate(User)
-      lambda { Mockumentary::User }.should_not raise_error
-    end
-
-    it 'created class is a Mockumentary::Mockery' do
-      Mockumentary::User.ancestors.should include(Mockumentary::Mockery)
-    end
-
-    it "should not re-evaluate the class desclaration if the class already exists" do
-      Mockumentary.should_not_receive(:class_eval)
-      Mockumentary.generate(User)
-    end
-
-    it 'should introspect on the created class' do
-      Mockumentary.send(:remove_const, :User) if defined?(Mockumentary::User)
-      Mockumentary.generate(User)
-      Mockumentary::User.mock_defaults.should == {:name => :string}
-    end
-  end
-
-  describe '.instrospect' do
+  describe '.introspect' do
     before do
       Rails.stub(:root).and_return(FIXTURE_ROOT)
-      Mockumentary.send(:remove_const, :User) if defined?(Mockumentary::User)
-      Mockumentary.send(:remove_const, :Event) if defined?(Mockumentary::Event)
-      Mockumentary.send(:remove_const, :EventResource) if defined?(Mockumentary::EventResource)
-      Mockumentary.send(:remove_const, :Task) if defined?(Mockumentary::Task)
-      Mockumentary::Event.send(:remove_const, :Follow) if defined?(Mockumentary::Event::Follow)
+
+      @classes = []
+      Mockery.stub(:generate) do |args|
+        @classes << args
+      end
+    end
+    
+    it 'calls Mockery.generate for each of the first level active record objects found' do
+      Mockumentary.introspect
+      @classes.should include User, Event, EventResource, Task
     end
 
-    it 'generates for all first level models' do
+    it 'calls Mockery.generate on nested models' do
       Mockumentary.introspect
-      defined?(Mockumentary::User).should == 'constant'
-      defined?(Mockumentary::Event).should == 'constant'
-      defined?(Mockumentary::EventResource).should == 'constant'
-      defined?(Mockumentary::Task).should == 'constant'
-    end
-
-    it 'generates recursively for deeper models' do
-      Mockumentary.introspect
-      defined?(Mockumentary::Event::Follow).should == 'constant'
+      @classes.should include Event::Follow
     end
   end
 
@@ -60,7 +30,7 @@ describe Mockumentary do
       @path = @dir + "/mockumentary.yml"
       File.delete(@path) if File.exist?(@path)
 
-      class Mockumentary::User
+      class Mockery::User
         def self.overrides
           {
             :init => {:state => 'new'},

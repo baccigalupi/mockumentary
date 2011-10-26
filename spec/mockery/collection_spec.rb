@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe Mockumentary::Collection do
   describe '::Collection' do
     before do
-      Mockumentary.generate(User)
-      @collection = Mockumentary::Collection.new(Mockumentary::User)
+      Mockery.generate(User)
+      @collection = Mockumentary::Collection.new(Mockery::User)
     end
 
     it 'is enumerable' do
@@ -17,7 +17,7 @@ describe Mockumentary::Collection do
     end
 
     it 'mock a collection of new objects of a particular type' do
-      @collection.mock(4).map(&:class).uniq.should == [Mockumentary::User]
+      @collection.mock(4).map(&:class).uniq.should == [Mockery::User]
       @collection.size.should == 4
       @collection.first.new_record?.should == true
       @collection.first.name.should be_a(String)
@@ -77,15 +77,15 @@ describe Mockumentary::Collection do
     it '#exist? compares by id (which doesn\'t make sense if you aren\'t using mock!)' do
       @collection.mock!(3)
       @collection.exist?(@collection.first).should be_true
-      @collection.exist?(Mockumentary::User.mock!).should be_false
+      @collection.exist?(Mockery::User.mock!).should be_false
     end
   end  
 end
 
-describe Mockumentary::Mockery, 'collection mocking' do
+describe Mockery, 'collection mocking' do
   before do
-    Mockumentary.generate(User)
-    @user = Mockumentary::User.mock
+    Mockery.generate(User)
+    @user = Mockery::User.mock
   end
 
   it 'should default to empty collections' do
