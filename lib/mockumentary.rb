@@ -29,8 +29,8 @@ module Mockumentary
   end
 end
 
-require 'data'
-require 'collection'
-require 'model'
-require 'mockery'
-require 'mocksimile'
+require 'mockumentary/data'
+require 'mockumentary/collection'
+require 'mockumentary/model'
+require 'mockumentary/mockery'
+require 'mockumentary/mocksimile'
