@@ -23,7 +23,7 @@ describe Mockery do
 
   describe '.generate' do
     before do
-      Mockery.generate(User) unless defined?(Mockery::User)
+      Mockery.generate(User)
     end
 
     it 'creates a class in the Mockery namespace' do
@@ -43,8 +43,6 @@ describe Mockery do
       Mockery::User.mock_defaults.should == {:name => :string}
     end
   end
-
-
 
   describe 'mocking' do
     before do
@@ -225,6 +223,65 @@ describe Mockery do
       it 'should options passed into new over those on the class' do
         @user.state.should == 'jaded'
       end
+    end
+  end
+
+  describe '.dump' do
+    before do
+      Rails.stub(:root).and_return(FIXTURE_ROOT)
+      Mockumentary.introspect
+      @dir = "#{FIXTURE_ROOT}/config"
+      @path = @dir + "/mockumentary.yml"
+      File.delete(@path) if File.exist?(@path)
+
+      class Mockery::User
+        def self.overrides
+          {
+            :init => {:state => 'new'},
+            :mock => {:full_name => :full_name},
+            :save => {:state => 'saved'}
+          }
+        end
+      end
+
+      Mockery.dump
+      @hash = YAML.load(File.read(@path))
+    end
+
+    it 'will create a new file to the Rails.root config path' do
+      File.exist?(@path).should be_true
+    end
+
+    it 'will have an entry for each class' do
+      @hash.keys.should include 'User', 'Event', 'EventResource', 'Task', 'Event::Follow'
+    end
+
+    it 'each class will have an init hash that combines that classes overrides with init_defaults' do
+      @hash['User'][:init].should == {
+        :state => 'new',
+        :new_record => true
+      }
+    end
+
+    it 'each class will have a mock hash that combines overrieds with defaults' do
+      @hash['User'][:mock].should == {
+        :name => :string,
+        :full_name => :full_name
+      }
+    end
+
+    it 'each class will have a save hash that combines overrides with defaults' do
+      save_hash = @hash['User'][:save]
+      save_hash[:state].should == 'saved'
+      save_hash[:created_at].should == :datetime
+      save_hash[:updated_at].should == :datetime
+      save_hash[:new_record].should == false
+      save_hash[:id].should == :uid
+    end
+
+    it 'stores the relationships' do
+      @hash['User'][:relationships].should == {
+      }
     end
   end
 end

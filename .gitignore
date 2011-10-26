@@ -51,5 +51,5 @@ pkg
 spec/mockery/test.db
 
 # project specific files
-spec/mockery/fixtures/config/*.yml
+spec/fixtures/config/*.yml
 performance.txt

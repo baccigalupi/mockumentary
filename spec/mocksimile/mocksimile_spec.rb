@@ -31,5 +31,11 @@ describe Mocksimile do
         :state => 'saved'
       }
     end
+
+    it 'should set the relationships' do
+      Mocksimile::User.relationships.should == {
+        
+      }
+    end
   end
 end
