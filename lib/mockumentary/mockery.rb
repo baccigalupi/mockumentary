@@ -22,12 +22,8 @@ class Mockery < Mockumentary::Model
     class_eval "#{container_name}::#{klass}.ar_class = ::#{klass}"
   end
 
-  def self.relationships
-    @relationships ||= {}
-  end
-
   def self.reset_defaults
-    # relationships should be in here too
+    @relationships = nil
     @save_defaults = nil
     @mock_defaults = nil
     @uid = nil
@@ -71,10 +67,19 @@ class Mockery < Mockumentary::Model
       mock = klass.mock_defaults.dup
       mock.merge!(klass.overrides[:mock]) if klass.overrides && klass.overrides[:mock]
 
+      relationships = klass.relationships.inject({}) do |result, array|
+        key = array.first
+        value = array.last # a lambda 
+        relationship_type = value.call.type.to_s.gsub(/^Mockery::/, '')        
+        result[key] = relationship_type
+        result
+      end
+
       result[klass.ar_class.to_s] = {
         :init => init,
         :save => save,
-        :mock => mock
+        :mock => mock,
+        :relationships => relationships
       }
       result
     end

@@ -36,6 +36,10 @@ module Mockumentary
       RUBY
     end
 
+    def self.relationships
+      @relationships ||= {}
+    end
+
     def self.constantize(klass)
       classes.detect{|c| c.to_s == "#{container_name}::#{klass}"}
     end

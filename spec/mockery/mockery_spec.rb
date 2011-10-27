@@ -281,6 +281,10 @@ describe Mockery do
 
     it 'stores the relationships' do
       @hash['User'][:relationships].should == {
+        :tasks => 'Task',
+        :activities => 'Event',
+        :activity_references => 'EventResource',
+        :events => 'Event'
       }
     end
   end

@@ -6,7 +6,13 @@ describe Mocksimile do
       Mocksimile.generate('User', {
          :init => {:state => 'new'},
          :mock => {:full_name => :full_name},
-         :save => {:state => 'saved'}
+         :save => {:state => 'saved'},
+         :relationships => {
+            :tasks => 'Task',
+            :activities => 'Event',
+            :activity_references => 'EventResource',
+            :events => 'Event'
+        }
       })
     end
 
@@ -32,10 +38,10 @@ describe Mocksimile do
       }
     end
 
-    it 'should set the relationships' do
-      Mocksimile::User.relationships.should == {
-        
-      }
+    it 'should set the relationships with appropriate lambdas' do
+      Mocksimile::User.relationships.keys.should == [:tasks, :activities, :activity_references, :events]
+      Mocksimile::User.relationships.values.map(&:class).uniq.should == [Proc]
+      Mocksimile::User.relationships[:tasks].call.type.should == Mocksimile::Task
     end
   end
 end
