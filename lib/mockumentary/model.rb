@@ -56,7 +56,7 @@ module Mockumentary
 
     def self.fake_data(key)
       data = Mockumentary::Data.generate(key)
-      
+
       unless data
         data  = if key == :uid
           uid

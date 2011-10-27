@@ -1,7 +1,7 @@
 module Mockumentary
   module Data
     def self.generate(key)
-      self.send(key) rescue nil
+      self.send(key) if key.is_a?(Symbol) && respond_to?(key) 
     end
 
     def self.string
@@ -25,7 +25,7 @@ module Mockumentary
     end
 
     def self.time
-      Time.now + rand(60).days
+      Time.now + rand(60) * (3600*24)
     end
 
     def self.timestamp
@@ -37,7 +37,7 @@ module Mockumentary
     end
 
     def self.date
-      Date.today + rand(60)
+      Date.today + rand(60) * (3600*24)
     end
 
     def self.binary

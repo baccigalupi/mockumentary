@@ -223,6 +223,10 @@ describe Mockery do
       it 'should options passed into new over those on the class' do
         @user.state.should == 'jaded'
       end
+
+      it 'should override the initalization options' do
+        @user.new_record.should == false
+      end
     end
   end
 

@@ -44,4 +44,44 @@ describe Mocksimile do
       Mocksimile::User.relationships[:tasks].call.type.should == Mocksimile::Task
     end
   end
+
+  describe 'usage' do
+    before :all do
+      RAILS_ROOT = FIXTURE_ROOT unless defined?(RAILS_ROOT)
+      Mocksimile.load 
+    end
+
+    it 'should use the initialization default attributes' do
+      user = Mocksimile::User.new
+      user.new_record.should == true
+      user.state.should == 'new'
+    end
+
+    it 'should use the mock default attributes' do
+      user = Mocksimile::User.mock
+      user.new_record.should == true
+      user.state.should == 'new'
+      user.name.should be_a(String)
+      user.full_name.should be_a(String)
+      user.full_name.split.size.should == 2
+    end
+
+    it 'should use the save default attributes' do
+      user = Mocksimile::User.mock!
+      user.new_record.should == false
+      user.state.should == 'saved'
+      user.name.should be_a(String)
+      user.full_name.should be_a(String)
+      user.created_at.should be_a(Time)
+      user.updated_at.should be_a(Time)
+      user.id.should be_a(Integer)
+    end
+
+    it 'relationships work' do
+      user = Mocksimile::User.mock!
+      user.events.mock!
+      user.events.size.should == 1
+      user.events.first.is_a?(Mocksimile::Event)
+    end
+  end
 end

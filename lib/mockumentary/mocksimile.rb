@@ -13,6 +13,7 @@ class Mocksimile < Mockumentary::Model
   end
 
   def self.build_relationships(opts)
+    attr_accessor *(opts.keys)
     @relationships = opts.inject({}) do |result, arr|
       key = arr.first
       klass = generate( arr.last )
