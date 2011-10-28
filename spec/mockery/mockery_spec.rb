@@ -84,6 +84,13 @@ describe Mockery do
         user = Mockery::User.new(:name => 'foo bar')
         user.name.should == 'foo bar'
       end
+
+      it 'should have relationships' do
+        user = Mockery::User.new
+        user.event_resources.mock
+        user.event_resources.size.should == 1
+        user.event_resources.first.should be_a(Mockery::EventResource)
+      end
     end
 
     describe '.mock' do 
