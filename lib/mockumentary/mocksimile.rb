@@ -46,4 +46,12 @@ class Mocksimile < Mockumentary::Model
     config.each{ |klass_name, options| Mocksimile.generate(klass_name, options) }
   end
 
+  def self.release
+    if self.to_s == container_name
+      classes.map{|c| c.release }
+    else
+      release_name = self.to_s.gsub(/^#{container_name}::/, '')
+      eval "::#{release_name} = #{self} unless defined?(::#{release_name})"
+    end
+  end
 end

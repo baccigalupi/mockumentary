@@ -27,6 +27,11 @@ module Mockumentary
   def self.load(dir=nil)
     Mocksimile.load(dir)
   end
+
+  def self.load_and_release(dir=nil)
+    load(dir)
+    Mocksimile.release
+  end
 end
 
 require 'mockumentary/data'

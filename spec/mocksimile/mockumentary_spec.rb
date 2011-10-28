@@ -22,4 +22,17 @@ describe Mockumentary do
       defined?(Mocksimile::Event::Follow).should be_true
     end
   end
+
+  describe '.load_and_release' do
+    it 'calls load on itself' do
+      Mockumentary.should_receive(:load)
+      Mockumentary.load_and_release
+    end
+
+    it 'calls release on Mocksimile' do
+      Mockumentary.stub(:load)
+      Mocksimile.should_receive(:release)
+      Mockumentary.load_and_release
+    end
+  end
 end 

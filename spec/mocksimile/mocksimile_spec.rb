@@ -84,4 +84,23 @@ describe Mocksimile do
       user.events.first.is_a?(Mocksimile::Event)
     end
   end
+
+  describe '.release' do
+    before :all do
+      Mocksimile.load
+    end
+
+    it 'should move a copy of an individual mocksimile class into the public namespace' do
+      Mocksimile::User.release
+      User.should == Mocksimile::User
+    end
+
+    it 'should move all stored classes into the public namespace when called on Mocksimile' do
+      Mocksimile.release
+      Event.should == Mocksimile::Event
+      EventResource.should == Mocksimile::EventResource
+      Task.should == Mocksimile::Task
+      Event::Follow.should == Mocksimile::Event::Follow
+    end
+  end
 end
