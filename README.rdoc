@@ -12,6 +12,16 @@ The second, a Mocksimile, is a non-introspective version built from a Mockery. I
 Mocking isn't for everyone, so test-drive responsibly.
 
 
+
+========
+Wiki pages available on github. Documentation in code will follow with
+if people start using it. Questions are always welcome through github
+too.
+
+For terminology usage 'mock' vs 'stub' please see the Wiki. There is a
+note at the top of each page.
+
+
 == Contributing to mockumentary
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
