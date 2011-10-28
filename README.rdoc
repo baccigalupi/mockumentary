@@ -1,6 +1,16 @@
 = mockumentary
 
-Description goes here.
+With the happy proliferation of TDD, test suites are getting massive, and developer efficiency is dwindling as we wait for our tests to pass. There is a big tradeoff between making unit test more integration-ish (and therefore more life-like) vs. making them very mocky, unity and fast. Mockumentary is a library for the
+later. It inspects the ActiveRecord universe and makes a series of AR mockeries that approximate model without hitting the database, or making any assertions. The assertions, they are still part of the developers job in testing.
+
+Mocumentary has two types of AR mock objects: 
+
+One is used within the Rails universe, a Mockery. It uses introspection to derive association and field information from its ActiveRecord class. It requires Rails or at least ActiveRecord in the test universe where it is used. These Mockeries can be dumped to YAML and used in an alternate universe of testing....
+
+The second, a Mocksimile, is a non-introspective version built from a Mockery. In fact, Mockery dumps its class descriptions to a YAML file that is loaded by Mocksimile. This static version can be used outside the Rails test universe in a suite faster than the speed of Rails environment load time.
+    
+Mocking isn't for everyone, so test-drive responsibly.
+
 
 == Contributing to mockumentary
  
@@ -8,8 +18,8 @@ Description goes here.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
 * Start a feature/bugfix branch
+* Write test(s) (in Rspec and in the appropriate place) that describe the bug or feature
 * Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
 == Copyright
