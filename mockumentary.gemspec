@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     "lib/mockumentary/mockery.rb",
     "lib/mockumentary/mocksimile.rb",
     "lib/mockumentary/model.rb",
+    "mockumentary.gemspec",
     "spec/fixtures/app/models/event.rb",
     "spec/fixtures/app/models/event/follow.rb",
     "spec/fixtures/app/models/event_resource.rb",
