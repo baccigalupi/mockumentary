@@ -11,6 +11,10 @@ describe Mockumentary do
       end
     end
 
+    it 'does not fail with non-ar models' do
+      lambda { Mockumentary.inspect }.should_not raise_error
+    end
+
     it 'calls Mockery.generate for each of the first level active record objects found' do
       Mockumentary.introspect
       @classes.should include User, Event, EventResource, Task

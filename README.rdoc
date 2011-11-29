@@ -12,8 +12,6 @@ The second, a Mocksimile, is a non-introspective version built from a Mockery. I
 Mocking isn't for everyone, so test-drive responsibly.
 
 
-
-========
 Wiki pages available on github. Documentation in code will follow with
 if people start using it. Questions are always welcome through github
 too.

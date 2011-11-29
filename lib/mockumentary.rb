@@ -6,7 +6,7 @@ module Mockumentary
       Dir['*.rb'].each do |file|
         require "#{dir}/#{file}"
         ar_class = (namespace + file.gsub(/\.rb$/, '').classify).constantize
-        Mockery.generate(ar_class)
+        Mockery.generate(ar_class) rescue nil
       end
 
       Dir['*'].each do |file|
