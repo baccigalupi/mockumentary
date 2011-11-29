@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mockumentary"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kane Baccigalupi"]
-  s.date = "2011-10-28"
+  s.date = "2011-11-29"
   s.description = "    With the happy proliferation of TDD, test suites are getting massive, and developer efficiency is dwindling\n    as we wait for our tests to pass. There is a big tradeoff between making unit test more integrationish (and therefore more reliable) vs.\n    making them very mocky, unity and fast. Mockumentary is a library for the later. It inspects the ActiveRecord universe and\n    makes a series of AR mockeries that approximate model without hitting the database, or making any assertions. The assertions,\n    they are still part of the developers job.\n    \n    Mocumentary has two types of AR mockeries: One is used within the Rails universe. It uses introspection to derive association\n    and field information. The second is a static copy built from the first. This static version can be used outside the Rails\n    test universe in a suite faster than the speed of Rails environment load time.\n    \n    Mocking isn't for everyone, so test-drive responsibly.\n"
   s.email = "baccigalupi@gmail.com"
   s.extra_rdoc_files = [
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
     "spec/fixtures/app/models/event.rb",
     "spec/fixtures/app/models/event/follow.rb",
     "spec/fixtures/app/models/event_resource.rb",
+    "spec/fixtures/app/models/foo.rb",
     "spec/fixtures/app/models/task.rb",
     "spec/fixtures/app/models/user.rb",
     "spec/fixtures/config/.gitkeep",
